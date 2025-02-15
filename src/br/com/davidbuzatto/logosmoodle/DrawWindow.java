@@ -3,7 +3,6 @@ package br.com.davidbuzatto.logosmoodle;
 import br.com.davidbuzatto.jsge.core.engine.EngineFrame;
 import br.com.davidbuzatto.jsge.geom.Path;
 import br.com.davidbuzatto.jsge.geom.Rectangle;
-import br.com.davidbuzatto.jsge.image.Image;
 import java.awt.Color;
 import java.io.File;
 
