@@ -39,6 +39,7 @@ public class PainelSelecaoCores extends JPanel {
         } else {
             this.cor = cor;
         }
+        repaint();
     }
     
 }

@@ -54,7 +54,7 @@ public class DrawWindow extends EngineFrame {
     
     public DrawWindow() {
         
-        super( 500, 500, "Logo", 60, true, false, false, true, false );
+        super( 500, 500, "Imagem do Curso", 60, true, false, false, true, false );
         setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
         
         logoWidth = 490;
@@ -86,18 +86,6 @@ public class DrawWindow extends EngineFrame {
         nomeProfessor = "Nome do Professor";
         
         partesNomeDisciplina = nomeDisciplina.split( "\n" );
-        
-        corFundo = WHITE;
-        corBorda = BLACK;
-        corCima = BLACK;
-        corBaixo = BLACK;
-        corSigla = BLACK;
-        corCimaSigla = WHITE;
-        corNomeDisciplina = BLACK;
-        corNomeCurso = BLACK;
-        corBaixoNomeCurso = WHITE;
-        corNomeProfessor = BLACK;
-        corBaixoNomeProfessor = WHITE;
         
         mostrarCima = true;
         mostrarBaixo = true;

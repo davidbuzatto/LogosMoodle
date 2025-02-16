@@ -1,5 +1,7 @@
 package br.com.davidbuzatto.logosmoodle;
 
+import br.com.davidbuzatto.jsge.core.engine.EngineFrame;
+import br.com.davidbuzatto.jsge.core.utils.ColorUtils;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import java.awt.event.ComponentAdapter;
@@ -7,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.io.File;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,7 +29,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         drawWindow = new DrawWindow();
         drawWindow.setLocation( getX() + getWidth(), getY() );
         
-        atualizar();
+        drawWindow.reset();
+        gerarEsquema( Color.BLACK );
         
     }
 
@@ -79,13 +83,11 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         lblCorBaixoNomeProfessor = new javax.swing.JLabel();
         painelCorBaixoNomeProfessor = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
         btnNovo = new javax.swing.JButton();
-        btnAbrir = new javax.swing.JButton();
         btnGerar = new javax.swing.JButton();
         btnSalvarImagem = new javax.swing.JButton();
-        btnSalvarDados = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Logos Moodle");
+        setTitle("Imagens para Cursos do Moodle");
         setResizable(false);
 
         lblSiglaDisciplina.setText("Sigla da Disciplina:");
@@ -514,14 +516,6 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/davidbuzatto/logosmoodle/icones/folder.png"))); // NOI18N
-        btnAbrir.setToolTipText("Abrir");
-        btnAbrir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAbrirActionPerformed(evt);
-            }
-        });
-
         btnGerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/davidbuzatto/logosmoodle/icones/palette.png"))); // NOI18N
         btnGerar.setToolTipText("Gerar Esquema");
         btnGerar.addActionListener(new java.awt.event.ActionListener() {
@@ -535,14 +529,6 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         btnSalvarImagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalvarImagemActionPerformed(evt);
-            }
-        });
-
-        btnSalvarDados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/davidbuzatto/logosmoodle/icones/disk.png"))); // NOI18N
-        btnSalvarDados.setToolTipText("Salvar Dados");
-        btnSalvarDados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarDadosActionPerformed(evt);
             }
         });
 
@@ -576,13 +562,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnNovo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAbrir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGerar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvarImagem)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvarDados)))
+                        .addComponent(btnSalvarImagem)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -613,12 +595,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGerar)
-                    .addComponent(btnSalvarDados)
-                    .addComponent(btnSalvarImagem)
-                    .addComponent(btnAbrir)
-                    .addComponent(btnNovo))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGerar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSalvarImagem, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -710,19 +690,25 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_painelCorBaixoNomeProfessorMouseReleased
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        drawWindow.reset();
-        atualizar();
-        painelCores.repaint();
+        
+        if ( JOptionPane.showConfirmDialog( 
+                this, 
+                "Deseja criar uma nova imagem?", 
+                "Confirmação", 
+                JOptionPane.YES_NO_OPTION
+             ) == JOptionPane.YES_OPTION ) {
+            
+            drawWindow.reset();
+            gerarEsquema( Color.BLACK );
+            //gerarEsquema( new Color( 20, 132, 175 ) );
+            
+        }
+        
     }//GEN-LAST:event_btnNovoActionPerformed
 
-    private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAbrirActionPerformed
-
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
-        
         Color base = JColorChooser.showDialog( this, "Escolha uma cor base", Color.BLACK );
-        
+        gerarEsquema( base );
     }//GEN-LAST:event_btnGerarActionPerformed
 
     private void btnSalvarImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarImagemActionPerformed
@@ -738,9 +724,31 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             public void componentHidden( ComponentEvent e ) {
                 new Thread( () -> {
                     try {
-                        Thread.sleep( 1000 );
                         File f = jfc.getSelectedFile();
-                    drawWindow.salvarImagem( f );
+                        if ( f != null ) {
+                            if ( !f.getName().toLowerCase().endsWith( ".png" ) ) {
+                                f = new File( f.getAbsolutePath() + ".png" );
+                            }
+                            boolean ok;
+                            if ( f.exists() ) {
+                                if ( JOptionPane.showConfirmDialog( 
+                                        null, 
+                                        "O arquivo já existe! Deseja o sobrescrever?", 
+                                        "Confirmação", 
+                                        JOptionPane.YES_NO_OPTION
+                                    ) == JOptionPane.YES_OPTION ) {
+                                    ok = true;
+                                } else {
+                                    ok = false;
+                                }
+                            } else {
+                                ok = true;
+                            }
+                            if ( ok ) {
+                                Thread.sleep( 1000 );
+                                drawWindow.salvarImagem( f );
+                            }
+                        }
                     } catch ( InterruptedException exc ) {
                     }
                 }).start();
@@ -750,10 +758,6 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jfc.setVisible( false );
         
     }//GEN-LAST:event_btnSalvarImagemActionPerformed
-
-    private void btnSalvarDadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarDadosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalvarDadosActionPerformed
 
     private void abrirSelecaoCor( PainelSelecaoCores painel, String titulo ) {
         
@@ -773,13 +777,13 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         txtNomeProfessor.setText( drawWindow.getNomeProfessor() );
         checkMostrarCima.setSelected( drawWindow.isMostrarCima() );
         checkMostrarBaixo.setSelected( drawWindow.isMostrarBaixo() );
-        checkMostrarBorda.setSelected( drawWindow.isMostrarBaixo() );
+        checkMostrarBorda.setSelected( drawWindow.isMostrarBorda() );
         
         painelCorFundo.setCor( drawWindow.getCorFundo() );
         painelCorBorda.setCor( drawWindow.getCorBorda() );
         painelCorCima.setCor( drawWindow.getCorCima() );
         painelCorBaixo.setCor( drawWindow.getCorBaixo() );
-        painelCorSigla.setCor( drawWindow.getCorFundo() );
+        painelCorSigla.setCor( drawWindow.getCorSigla() );
         painelCorCimaSigla.setCor( drawWindow.getCorCimaSigla() );
         painelCorNomeDisciplina.setCor( drawWindow.getCorNomeDisciplina());
         painelCorNomeCurso.setCor( drawWindow.getCorNomeCurso());
@@ -787,6 +791,31 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCorNomeProfessor.setCor( drawWindow.getCorNomeProfessor());
         painelCorBaixoNomeProfessor.setCor( drawWindow.getCorBaixoNomeProfessor() );
         
+    }
+    
+    private void gerarEsquema( Color base ) {
+        
+        if ( base != null ) {
+            
+            Color cima = ColorUtils.colorBrightness( base, -.8 );
+            Color baixo = ColorUtils.colorBrightness( base, .1 );
+            
+            drawWindow.setCorFundo( EngineFrame.RAYWHITE );
+            drawWindow.setCorBorda( Color.BLACK );
+            drawWindow.setCorCima( cima );
+            drawWindow.setCorBaixo( baixo );
+            drawWindow.setCorSigla( base );
+            drawWindow.setCorCimaSigla( Color.WHITE );
+            drawWindow.setCorNomeDisciplina( new Color( 51, 51, 51 ) );
+            drawWindow.setCorNomeCurso( Color.BLACK );
+            drawWindow.setCorBaixoNomeCurso( EngineFrame.RAYWHITE );
+            drawWindow.setCorNomeProfessor( Color.BLACK );
+            drawWindow.setCorBaixoNomeProfessor( EngineFrame.RAYWHITE );
+            
+            atualizar();
+            
+        }
+            
     }
     
     /**
@@ -803,10 +832,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaNomeDisciplina;
-    private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnGerar;
     private javax.swing.JButton btnNovo;
-    private javax.swing.JButton btnSalvarDados;
     private javax.swing.JButton btnSalvarImagem;
     private javax.swing.JCheckBox checkMostrarBaixo;
     private javax.swing.JCheckBox checkMostrarBorda;
