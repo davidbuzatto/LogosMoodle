@@ -704,6 +704,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             drawWindow.reset();
             gerarEsquema( Color.BLACK );
             
+            /*
             // SBVAPRC
             gerarEsquema( new Color( 23, 147, 195 ) );
             
@@ -715,6 +716,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             
             // SBVORIN
             gerarEsquema( new Color( 39, 111, 139 ) );
+            */
             
         }
         
