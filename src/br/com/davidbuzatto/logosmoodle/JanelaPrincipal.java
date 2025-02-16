@@ -6,6 +6,8 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -23,15 +25,16 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * Creates new form JanelaPrincipal
      */
     public JanelaPrincipal() {
-        
         initComponents();
-        
-        drawWindow = new DrawWindow();
-        drawWindow.setLocation( getX() + getWidth(), getY() );
-        
-        drawWindow.reset();
-        gerarEsquema( Color.BLACK );
-        
+        addWindowListener( new WindowAdapter() {
+            @Override
+            public void windowOpened( WindowEvent e ) {
+                drawWindow = new DrawWindow();
+                drawWindow.setLocation( getX() + getWidth(), getY() );
+                drawWindow.reset();
+                gerarEsquema( Color.BLACK );
+            }
+        });
     }
 
     /**
@@ -700,14 +703,25 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             
             drawWindow.reset();
             gerarEsquema( Color.BLACK );
-            //gerarEsquema( new Color( 20, 132, 175 ) );
+            
+            // SBVAPRC
+            gerarEsquema( new Color( 23, 147, 195 ) );
+            
+            // SBVESDD
+            gerarEsquema( new Color( 46, 130, 163 ) );
+            
+            // SBVCONC
+            gerarEsquema( new Color( 66, 135, 38 ) );
+            
+            // SBVORIN
+            gerarEsquema( new Color( 39, 111, 139 ) );
             
         }
         
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
-        Color base = JColorChooser.showDialog( this, "Escolha uma cor base", Color.BLACK );
+        Color base = JColorChooser.showDialog( this, "Escolha uma cor base", drawWindow.getCorSigla() );
         gerarEsquema( base );
     }//GEN-LAST:event_btnGerarActionPerformed
 
@@ -806,7 +820,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             drawWindow.setCorBaixo( baixo );
             drawWindow.setCorSigla( base );
             drawWindow.setCorCimaSigla( Color.WHITE );
-            drawWindow.setCorNomeDisciplina( new Color( 51, 51, 51 ) );
+            drawWindow.setCorNomeDisciplina( new Color( 38, 38, 38 ) );
             drawWindow.setCorNomeCurso( Color.BLACK );
             drawWindow.setCorBaixoNomeCurso( EngineFrame.RAYWHITE );
             drawWindow.setCorNomeProfessor( Color.BLACK );
