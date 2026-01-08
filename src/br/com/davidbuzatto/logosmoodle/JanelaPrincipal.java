@@ -9,9 +9,15 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -19,13 +25,22 @@ import javax.swing.JOptionPane;
  */
 public class JanelaPrincipal extends javax.swing.JFrame {
     
+    private static final String EXTENSAO = "lmo";
+    
     private DrawWindow drawWindow;
+    private JFileChooser jfc;
     
     /**
      * Creates new form JanelaPrincipal
      */
     public JanelaPrincipal() {
+        
         initComponents();
+        
+        jfc = new JFileChooser( "./" );
+        jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        jfc.setFileFilter( new FileNameExtensionFilter( "Logos Moodle", "lmo" ) );
+        
         addWindowListener( new WindowAdapter() {
             @Override
             public void windowOpened( WindowEvent e ) {
@@ -35,6 +50,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 gerarEsquema( Color.BLACK );
             }
         });
+        
     }
 
     /**
@@ -86,11 +102,13 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         lblCorBaixoNomeProfessor = new javax.swing.JLabel();
         painelCorBaixoNomeProfessor = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
         btnNovo = new javax.swing.JButton();
+        btnAbrir = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         btnGerar = new javax.swing.JButton();
         btnSalvarImagem = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Imagens para Cursos do Moodle");
+        setTitle("Logotipos para Cursos do Moodle");
         setResizable(false);
 
         lblSiglaDisciplina.setText("Sigla da Disciplina:");
@@ -519,6 +537,22 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/davidbuzatto/logosmoodle/icones/folder.png"))); // NOI18N
+        btnAbrir.setToolTipText("Abrir");
+        btnAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirActionPerformed(evt);
+            }
+        });
+
+        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/davidbuzatto/logosmoodle/icones/disk.png"))); // NOI18N
+        btnSalvar.setToolTipText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+
         btnGerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/davidbuzatto/logosmoodle/icones/palette.png"))); // NOI18N
         btnGerar.setToolTipText("Gerar Esquema");
         btnGerar.addActionListener(new java.awt.event.ActionListener() {
@@ -565,6 +599,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnNovo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAbrir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGerar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalvarImagem)))
@@ -590,18 +628,22 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                     .addComponent(txtNomeProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNomeProfessor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkMostrarCima)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkMostrarBaixo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkMostrarBorda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painelCores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGerar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSalvarImagem, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnNovo, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(checkMostrarCima)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkMostrarBaixo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkMostrarBorda)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(painelCores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnGerar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSalvarImagem, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnNovo, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(btnSalvar)
+                    .addComponent(btnAbrir))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -696,7 +738,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         
         if ( JOptionPane.showConfirmDialog( 
                 this, 
-                "Deseja criar uma nova imagem?", 
+                "Deseja criar um novo logotipo?", 
                 "Confirmação", 
                 JOptionPane.YES_NO_OPTION
              ) == JOptionPane.YES_OPTION ) {
@@ -704,19 +746,18 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             drawWindow.reset();
             gerarEsquema( Color.BLACK );
             
-            /*
             // SBVAPRC
-            gerarEsquema( new Color( 23, 147, 195 ) );
+            //gerarEsquema( new Color( 23, 147, 195 ) );
             
             // SBVESDD
-            gerarEsquema( new Color( 46, 130, 163 ) );
+            //gerarEsquema( new Color( 46, 130, 163 ) );
             
             // SBVCONC
-            gerarEsquema( new Color( 66, 135, 38 ) );
+            //gerarEsquema( new Color( 66, 135, 38 ) );
             
             // SBVORIN
-            gerarEsquema( new Color( 39, 111, 139 ) );
-            */
+            //gerarEsquema( new Color( 39, 111, 139 ) );
+            
             
         }
         
@@ -774,6 +815,130 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jfc.setVisible( false );
         
     }//GEN-LAST:event_btnSalvarImagemActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        
+        DadosLogo d = new DadosLogo(
+            txtSiglaDisciplina.getText(), 
+            areaNomeDisciplina.getText(), 
+            txtNomeCurso.getText(), 
+            txtNomeProfessor.getText(), 
+            checkMostrarCima.isSelected(), 
+            checkMostrarBaixo.isSelected(), 
+            checkMostrarBorda.isSelected(), 
+            painelCorFundo.getCor(), 
+            painelCorBorda.getCor(), 
+            painelCorCima.getCor(), 
+            painelCorBaixo.getCor(), 
+            painelCorSigla.getCor(), 
+            painelCorCimaSigla.getCor(), 
+            painelCorNomeDisciplina.getCor(), 
+            painelCorNomeCurso.getCor(), 
+            painelCorBaixoNomeCurso.getCor(), 
+            painelCorNomeProfessor.getCor(), 
+            painelCorBaixoNomeProfessor.getCor()
+        );
+        
+        jfc.setDialogTitle( "Salvar" );
+        jfc.showSaveDialog( this );
+        
+        File f = jfc.getSelectedFile();
+        
+        if ( f != null ) {
+            
+            if ( !f.getName().endsWith( EXTENSAO ) ) {
+                f = new File( f.getAbsolutePath() + "." + EXTENSAO );
+            }
+            
+            boolean ok = true;
+            
+            if ( f.exists() ) {
+                if ( JOptionPane.showConfirmDialog( 
+                        null, 
+                        "O arquivo já existe! Deseja o sobrescrever?", 
+                        "Confirmação", 
+                        JOptionPane.YES_NO_OPTION
+                    ) == JOptionPane.YES_OPTION ) {
+                    ok = true;
+                } else {
+                    ok = false;
+                }
+            }
+            
+            if ( ok ) {
+                try ( FileOutputStream fos = new FileOutputStream( f );
+                      ObjectOutputStream oos = new ObjectOutputStream( fos ); ) {
+
+                    oos.writeObject( d );
+
+                } catch ( IOException exc ) {
+                    exc.printStackTrace();
+                }
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
+        
+        jfc.setDialogTitle( "Abrir" );
+        jfc.showOpenDialog( this );
+        
+        File f = jfc.getSelectedFile();
+        
+        if ( f != null ) {
+            
+            try ( FileInputStream fis = new FileInputStream( f );
+                  ObjectInputStream ois = new ObjectInputStream( fis ); ) {
+
+                DadosLogo d = (DadosLogo) ois.readObject();
+
+                txtSiglaDisciplina.setText( d.siglaDisciplina() ); 
+                areaNomeDisciplina.setText( d.nomeDisciplina() ); 
+                txtNomeCurso.setText( d.nomeCurso() ); 
+                txtNomeProfessor.setText( d.nomeProfessor() ); 
+                checkMostrarCima.setSelected( d.mostrarDetalheCima() ); 
+                checkMostrarBaixo.setSelected( d.mostrarDetalheBaixo() ); 
+                checkMostrarBorda.setSelected( d.mostrarBorda() );
+                painelCorFundo.setCor( d.corFundo() ); 
+                painelCorBorda.setCor( d.corBorda() ); 
+                painelCorCima.setCor( d.corCima() ); 
+                painelCorBaixo.setCor( d.corBaixo() ); 
+                painelCorSigla.setCor( d.corSigla() ); 
+                painelCorCimaSigla.setCor( d.corSiglaCima() ); 
+                painelCorNomeDisciplina.setCor( d.corNomeDisciplina() ); 
+                painelCorNomeCurso.setCor( d.corNomeCurso() ); 
+                painelCorBaixoNomeCurso.setCor( d.corNomeCursoBaixo() ); 
+                painelCorNomeProfessor.setCor( d.corNomeProfessor() ); 
+                painelCorBaixoNomeProfessor.setCor( d.corNomeProfessorBaixo() );
+                
+                drawWindow.setSiglaDisciplina( d.siglaDisciplina() ); 
+                drawWindow.setNomeDisciplina( d.nomeDisciplina() ); 
+                drawWindow.setNomeCurso( d.nomeCurso() ); 
+                drawWindow.setNomeProfessor( d.nomeProfessor() ); 
+                drawWindow.setMostrarCima( d.mostrarDetalheCima() ); 
+                drawWindow.setMostrarBaixo( d.mostrarDetalheBaixo() ); 
+                drawWindow.setMostrarBorda( d.mostrarBorda() );
+                drawWindow.setCorFundo( d.corFundo() ); 
+                drawWindow.setCorBorda( d.corBorda() ); 
+                drawWindow.setCorCima( d.corCima() ); 
+                drawWindow.setCorBaixo( d.corBaixo() ); 
+                drawWindow.setCorSigla( d.corSigla() ); 
+                drawWindow.setCorCimaSigla( d.corSiglaCima() ); 
+                drawWindow.setCorNomeDisciplina( d.corNomeDisciplina() ); 
+                drawWindow.setCorNomeCurso( d.corNomeCurso() ); 
+                drawWindow.setCorBaixoNomeCurso( d.corNomeCursoBaixo() ); 
+                drawWindow.setCorNomeProfessor( d.corNomeProfessor() ); 
+                drawWindow.setCorBaixoNomeProfessor( d.corNomeProfessorBaixo() );
+
+            } catch ( IOException | ClassNotFoundException exc ) {
+                exc.printStackTrace();
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnAbrirActionPerformed
 
     private void abrirSelecaoCor( PainelSelecaoCores painel, String titulo ) {
         
@@ -848,8 +1013,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaNomeDisciplina;
+    private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnGerar;
     private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnSalvarImagem;
     private javax.swing.JCheckBox checkMostrarBaixo;
     private javax.swing.JCheckBox checkMostrarBorda;

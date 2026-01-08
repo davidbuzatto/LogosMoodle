@@ -54,7 +54,7 @@ public class DrawWindow extends EngineFrame {
     
     public DrawWindow() {
         
-        super( 500, 500, "Imagem do Curso", 60, true, false, false, true, false );
+        super( 500, 500, "Imagem do Curso", 60, true, false, false, true, false, false );
         setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
         
         logoWidth = 490;
