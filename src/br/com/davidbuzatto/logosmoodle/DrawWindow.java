@@ -42,6 +42,7 @@ public class DrawWindow extends EngineFrame {
     private Color corSigla;
     private Color corCimaSigla;
     private Color corNomeDisciplina;
+    private Color corCimaNomeDisciplina;
     
     private Color corNomeCurso;
     private Color corBaixoNomeCurso;
@@ -110,27 +111,18 @@ public class DrawWindow extends EngineFrame {
         
         clearBackground( corFundo );
         
-        drawBackground();
+        beginScissorMode( new Rectangle( logoX, logoY, logoWidth, logoHeight ) );
+        
         drawTextData();
         
         if ( mostrarBorda ) {
             drawRectangle( logoX, logoY, logoWidth - 1, logoHeight - 1, corBorda );
         }
         
+        endScissorMode();
+        
         drawRectangle( 0, 0, getScreenWidth() - 1, getScreenHeight() - 1, corBorda );
     
-    }
-    
-    private void drawBackground() {
-        
-        if ( mostrarCima ) {
-            fillPath( pCima, corCima );
-        }
-        
-        if ( mostrarBaixo ) {
-            fillPath( pBaixo, corBaixo );
-        }
-        
     }
     
     private void drawTextData() {
@@ -146,12 +138,6 @@ public class DrawWindow extends EngineFrame {
         
         setFontStyle( FONT_BOLD );
         drawText( sigla, logoX + logoWidth - wSigla - wNome - marginRight, logoY + marginTop, corSigla );
-        
-        if ( mostrarCima ) {
-            beginScissorMode( pCima );
-            drawText( sigla, logoX + logoWidth - wSigla - wNome - marginRight, logoY + marginTop, corCimaSigla );
-            endScissorMode();
-        }
         
         setFontStyle( FONT_PLAIN );
         drawText( nome, logoX + logoWidth - wNome - marginRight, logoY + marginTop, corNomeDisciplina );
@@ -171,11 +157,53 @@ public class DrawWindow extends EngineFrame {
         drawText( nomeProfessor, logoX + logoWidth - wNomeProfessor - marginRight, logoY + logoHeight - marginBottom, corNomeProfessor );
         drawText( nomeCurso, logoX + logoWidth - rNomeCurso.width - marginRight, logoY + logoHeight - rNomeCurso.height - marginBottom, corNomeCurso );
         
+        if ( mostrarCima ) {
+            
+            fillPath( pCima, corCima );
+            beginScissorMode( pCima );
+            setFontStyle( FONT_BOLD );
+            setFontSize( 40 );
+            drawText( sigla, logoX + logoWidth - wSigla - wNome - marginRight, logoY + marginTop, corCimaSigla );
+            
+            setFontStyle( FONT_PLAIN );
+            nome = partesNomeDisciplina[0];
+            drawText( nome, logoX + logoWidth - wNome - marginRight, logoY + marginTop, corCimaNomeDisciplina );
+
+            for ( int i = 1; i < partesNomeDisciplina.length; i++ ) {
+                nome = partesNomeDisciplina[i];
+                Rectangle rNome = measureTextBounds( nome );
+                drawText( nome, logoX + logoWidth - rNome.width - marginRight, logoY + marginTop + rNome.height * i, corCimaNomeDisciplina );
+            }
+            
+            endScissorMode();
+            
+        }
+        
         if ( mostrarBaixo ) {
+            
+            fillPath( pBaixo, corBaixo );
             beginScissorMode( pBaixo );
+            
+            setFontStyle( FONT_BOLD );
+            setFontSize( 40 );
+            drawText( sigla, logoX + logoWidth - wSigla - wNome - marginRight, logoY + marginTop, corCimaSigla );
+            
+            setFontStyle( FONT_PLAIN );
+            nome = partesNomeDisciplina[0];
+            drawText( nome, logoX + logoWidth - wNome - marginRight, logoY + marginTop, corCimaNomeDisciplina );
+
+            for ( int i = 1; i < partesNomeDisciplina.length; i++ ) {
+                nome = partesNomeDisciplina[i];
+                Rectangle rNome = measureTextBounds( nome );
+                drawText( nome, logoX + logoWidth - rNome.width - marginRight, logoY + marginTop + rNome.height * i, corCimaNomeDisciplina );
+            }
+            
+            setFontStyle( FONT_BOLD );
+            setFontSize( 20 );
             drawText( nomeProfessor, logoX + logoWidth - wNomeProfessor - marginRight, logoY + logoHeight - marginBottom, corBaixoNomeProfessor );
             drawText( nomeCurso, logoX + logoWidth - rNomeCurso.width - marginRight, logoY + logoHeight - rNomeCurso.height - marginBottom, corBaixoNomeCurso );
             endScissorMode();
+            
         }
         
     }
@@ -263,6 +291,14 @@ public class DrawWindow extends EngineFrame {
 
     public void setCorCimaSigla( Color corCimaSigla ) {
         this.corCimaSigla = corCimaSigla;
+    }
+    
+    public Color getCorCimaNomeDisciplina() {
+        return corCimaNomeDisciplina;
+    }
+
+    public void setCorCimaNomeDisciplina( Color corCimaNomeDisciplina ) {
+        this.corCimaNomeDisciplina = corCimaNomeDisciplina;
     }
 
     public Color getCorNomeDisciplina() {

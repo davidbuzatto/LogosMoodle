@@ -23,6 +23,7 @@ public record DadosLogo(
     Color corSigla,
     Color corSiglaCima,
     Color corNomeDisciplina,
+    Color corNomeDisciplinaCima,
     Color corNomeCurso,
     Color corNomeCursoBaixo,
     Color corNomeProfessor,

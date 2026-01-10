@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -30,6 +31,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private DrawWindow drawWindow;
     private JFileChooser jfc;
     
+    private DefaultComboBoxModel<EsquemaCorDisciplina> modeloEsquema;
+    
     /**
      * Creates new form JanelaPrincipal
      */
@@ -40,6 +43,15 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jfc = new JFileChooser( "./" );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.setFileFilter( new FileNameExtensionFilter( "Logos Moodle", "lmo" ) );
+        
+        modeloEsquema = new DefaultComboBoxModel<>();
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "Padrão", Color.BLACK ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVAPRC", new Color( 23, 147, 195 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVESDD", new Color( 46, 130, 163 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVCONC", new Color( 66, 135, 38 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVORIN", new Color( 39, 111, 139 ) ) );
+        comboEsquemas.setModel( modeloEsquema );
+        comboEsquemas.setRenderer( new EsquemaCorDisciplinaListCellRenderer() );
         
         addWindowListener( new WindowAdapter() {
             @Override
@@ -84,13 +96,16 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCorCima = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
         lblCorBaixo = new javax.swing.JLabel();
         painelCorBaixo = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
-        painelCoresDisciplina = new javax.swing.JPanel();
+        painelCoresSigla = new javax.swing.JPanel();
         lblCorSigla = new javax.swing.JLabel();
         painelCorSigla = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
         lblCorCimaSigla = new javax.swing.JLabel();
         painelCorCimaSigla = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
+        painelCoresDisciplina = new javax.swing.JPanel();
         lblCorNomeDisciplina = new javax.swing.JLabel();
         painelCorNomeDisciplina = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
+        lblCorCimaNomeDisciplina = new javax.swing.JLabel();
+        painelCorCimaNomeDisciplina = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
         painelCoresCurso = new javax.swing.JPanel();
         lblCorNomeCurso = new javax.swing.JLabel();
         painelCorNomeCurso = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
@@ -101,6 +116,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCorNomeProfessor = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
         lblCorBaixoNomeProfessor = new javax.swing.JLabel();
         painelCorBaixoNomeProfessor = new br.com.davidbuzatto.logosmoodle.PainelSelecaoCores();
+        painelEsquemas = new javax.swing.JPanel();
+        comboEsquemas = new javax.swing.JComboBox<>();
+        painelBotoes = new javax.swing.JPanel();
         btnNovo = new javax.swing.JButton();
         btnAbrir = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
@@ -208,7 +226,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
-        lblCorCima.setText("Cima:");
+        lblCorCima.setText("Em cima:");
 
         painelCorCima.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -227,7 +245,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
-        lblCorBaixo.setText("Baixo:");
+        lblCorBaixo.setText("Em baixo:");
 
         painelCorBaixo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -267,7 +285,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addComponent(lblCorBaixo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCorBaixo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         painelCoresFundoLayout.setVerticalGroup(
             painelCoresFundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,7 +322,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
-        lblCorCimaSigla.setText("Sigla Cima:");
+        lblCorCimaSigla.setText("Em cima:");
 
         painelCorCimaSigla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -321,6 +339,33 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCorCimaSiglaLayout.setVerticalGroup(
             painelCorCimaSiglaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout painelCoresSiglaLayout = new javax.swing.GroupLayout(painelCoresSigla);
+        painelCoresSigla.setLayout(painelCoresSiglaLayout);
+        painelCoresSiglaLayout.setHorizontalGroup(
+            painelCoresSiglaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelCoresSiglaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblCorSigla)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelCorSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCorCimaSigla)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelCorCimaSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        painelCoresSiglaLayout.setVerticalGroup(
+            painelCoresSiglaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelCoresSiglaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelCoresSiglaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblCorSigla)
+                    .addComponent(lblCorCimaSigla)
+                    .addComponent(painelCorSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(painelCorCimaSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         lblCorNomeDisciplina.setText("Nome da Disciplina:");
@@ -342,23 +387,38 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
+        lblCorCimaNomeDisciplina.setText("Em cima:");
+
+        painelCorCimaNomeDisciplina.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                painelCorCimaNomeDisciplinaMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout painelCorCimaNomeDisciplinaLayout = new javax.swing.GroupLayout(painelCorCimaNomeDisciplina);
+        painelCorCimaNomeDisciplina.setLayout(painelCorCimaNomeDisciplinaLayout);
+        painelCorCimaNomeDisciplinaLayout.setHorizontalGroup(
+            painelCorCimaNomeDisciplinaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        painelCorCimaNomeDisciplinaLayout.setVerticalGroup(
+            painelCorCimaNomeDisciplinaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout painelCoresDisciplinaLayout = new javax.swing.GroupLayout(painelCoresDisciplina);
         painelCoresDisciplina.setLayout(painelCoresDisciplinaLayout);
         painelCoresDisciplinaLayout.setHorizontalGroup(
             painelCoresDisciplinaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelCoresDisciplinaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblCorSigla)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painelCorSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCorCimaSigla)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painelCorCimaSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblCorNomeDisciplina)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCorNomeDisciplina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCorCimaNomeDisciplina)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelCorCimaNomeDisciplina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         painelCoresDisciplinaLayout.setVerticalGroup(
@@ -366,12 +426,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGroup(painelCoresDisciplinaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelCoresDisciplinaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblCorSigla)
-                    .addComponent(lblCorCimaSigla)
-                    .addComponent(painelCorSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(painelCorCimaSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCorNomeDisciplina)
-                    .addComponent(painelCorNomeDisciplina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(painelCorNomeDisciplina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCorCimaNomeDisciplina)
+                    .addComponent(painelCorCimaNomeDisciplina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -394,7 +452,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
-        lblCorBaixoNomeCurso.setText("Baixo:");
+        lblCorBaixoNomeCurso.setText("Em baixo:");
 
         painelCorBaixoNomeCurso.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -459,7 +517,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
-        lblCorBaixoNomeProfessor.setText("Baixo:");
+        lblCorBaixoNomeProfessor.setText("Em baixo:");
 
         painelCorBaixoNomeProfessor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -483,6 +541,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCoresProfessorLayout.setHorizontalGroup(
             painelCoresProfessorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelCoresProfessorLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(lblCorNomeProfessor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCorNomeProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -490,7 +549,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addComponent(lblCorBaixoNomeProfessor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCorBaixoNomeProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         painelCoresProfessorLayout.setVerticalGroup(
             painelCoresProfessorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -509,23 +568,50 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCoresLayout.setHorizontalGroup(
             painelCoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(painelCoresFundo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(painelCoresDisciplina, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(painelCoresSigla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(painelCoresCurso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(painelCoresLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(painelCoresProfessor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(painelCoresDisciplina, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(painelCoresProfessor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         painelCoresLayout.setVerticalGroup(
             painelCoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelCoresLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(painelCoresFundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelCoresSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCoresDisciplina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelCoresCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painelCoresProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(painelCoresProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        painelEsquemas.setBorder(javax.swing.BorderFactory.createTitledBorder("Esquemas de Cores"));
+
+        comboEsquemas.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboEsquemasItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout painelEsquemasLayout = new javax.swing.GroupLayout(painelEsquemas);
+        painelEsquemas.setLayout(painelEsquemasLayout);
+        painelEsquemasLayout.setHorizontalGroup(
+            painelEsquemasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelEsquemasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(comboEsquemas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        painelEsquemasLayout.setVerticalGroup(
+            painelEsquemasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelEsquemasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(comboEsquemas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -569,6 +655,36 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
+        painelBotoes.setLayout(painelBotoesLayout);
+        painelBotoesLayout.setHorizontalGroup(
+            painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelBotoesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNovo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAbrir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalvar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGerar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalvarImagem)
+                .addContainerGap())
+        );
+        painelBotoesLayout.setVerticalGroup(
+            painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGerar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSalvarImagem, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAbrir, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -595,17 +711,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                                     .addComponent(checkMostrarBorda))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addComponent(painelCores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnNovo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAbrir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGerar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvarImagem)))
+                    .addComponent(painelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(painelEsquemas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -628,22 +735,17 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                     .addComponent(txtNomeProfessor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNomeProfessor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkMostrarCima)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkMostrarBaixo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkMostrarBorda)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(painelCores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGerar, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnSalvarImagem, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnNovo, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(btnSalvar)
-                    .addComponent(btnAbrir))
+                .addComponent(checkMostrarCima)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkMostrarBaixo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkMostrarBorda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelCores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelEsquemas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -833,6 +935,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             painelCorSigla.getCor(), 
             painelCorCimaSigla.getCor(), 
             painelCorNomeDisciplina.getCor(), 
+            painelCorCimaNomeDisciplina.getCor(), 
             painelCorNomeCurso.getCor(), 
             painelCorBaixoNomeCurso.getCor(), 
             painelCorNomeProfessor.getCor(), 
@@ -908,6 +1011,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 painelCorSigla.setCor( d.corSigla() ); 
                 painelCorCimaSigla.setCor( d.corSiglaCima() ); 
                 painelCorNomeDisciplina.setCor( d.corNomeDisciplina() ); 
+                painelCorCimaNomeDisciplina.setCor( d.corNomeDisciplinaCima() ); 
                 painelCorNomeCurso.setCor( d.corNomeCurso() ); 
                 painelCorBaixoNomeCurso.setCor( d.corNomeCursoBaixo() ); 
                 painelCorNomeProfessor.setCor( d.corNomeProfessor() ); 
@@ -927,6 +1031,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 drawWindow.setCorSigla( d.corSigla() ); 
                 drawWindow.setCorCimaSigla( d.corSiglaCima() ); 
                 drawWindow.setCorNomeDisciplina( d.corNomeDisciplina() ); 
+                drawWindow.setCorCimaNomeDisciplina( d.corNomeDisciplinaCima() ); 
                 drawWindow.setCorNomeCurso( d.corNomeCurso() ); 
                 drawWindow.setCorBaixoNomeCurso( d.corNomeCursoBaixo() ); 
                 drawWindow.setCorNomeProfessor( d.corNomeProfessor() ); 
@@ -939,6 +1044,15 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnAbrirActionPerformed
+
+    private void painelCorCimaNomeDisciplinaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelCorCimaNomeDisciplinaMouseReleased
+        abrirSelecaoCor( painelCorCimaNomeDisciplina, "Cor do Nome da Disciplina no Detalhe de Cima" );
+        drawWindow.setCorCimaNomeDisciplina( painelCorCimaNomeDisciplina.getCor() );
+    }//GEN-LAST:event_painelCorCimaNomeDisciplinaMouseReleased
+
+    private void comboEsquemasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboEsquemasItemStateChanged
+        gerarEsquema( ( (EsquemaCorDisciplina) comboEsquemas.getModel().getSelectedItem() ).corBase() );
+    }//GEN-LAST:event_comboEsquemasItemStateChanged
 
     private void abrirSelecaoCor( PainelSelecaoCores painel, String titulo ) {
         
@@ -967,6 +1081,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelCorSigla.setCor( drawWindow.getCorSigla() );
         painelCorCimaSigla.setCor( drawWindow.getCorCimaSigla() );
         painelCorNomeDisciplina.setCor( drawWindow.getCorNomeDisciplina());
+        painelCorCimaNomeDisciplina.setCor( drawWindow.getCorCimaNomeDisciplina());
         painelCorNomeCurso.setCor( drawWindow.getCorNomeCurso());
         painelCorBaixoNomeCurso.setCor( drawWindow.getCorBaixoNomeCurso());
         painelCorNomeProfessor.setCor( drawWindow.getCorNomeProfessor());
@@ -988,6 +1103,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             drawWindow.setCorSigla( base );
             drawWindow.setCorCimaSigla( Color.WHITE );
             drawWindow.setCorNomeDisciplina( new Color( 38, 38, 38 ) );
+            drawWindow.setCorCimaNomeDisciplina( Color.WHITE );
             drawWindow.setCorNomeCurso( Color.BLACK );
             drawWindow.setCorBaixoNomeCurso( EngineFrame.RAYWHITE );
             drawWindow.setCorNomeProfessor( Color.BLACK );
@@ -1021,11 +1137,13 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkMostrarBaixo;
     private javax.swing.JCheckBox checkMostrarBorda;
     private javax.swing.JCheckBox checkMostrarCima;
+    private javax.swing.JComboBox<EsquemaCorDisciplina> comboEsquemas;
     private javax.swing.JLabel lblCorBaixo;
     private javax.swing.JLabel lblCorBaixoNomeCurso;
     private javax.swing.JLabel lblCorBaixoNomeProfessor;
     private javax.swing.JLabel lblCorBorda;
     private javax.swing.JLabel lblCorCima;
+    private javax.swing.JLabel lblCorCimaNomeDisciplina;
     private javax.swing.JLabel lblCorCimaSigla;
     private javax.swing.JLabel lblCorFundo;
     private javax.swing.JLabel lblCorNomeCurso;
@@ -1036,15 +1154,18 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblNomeDisciplina;
     private javax.swing.JLabel lblNomeProfessor;
     private javax.swing.JLabel lblSiglaDisciplina;
+    private javax.swing.JPanel painelBotoes;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorBaixo;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorBaixoNomeCurso;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorBaixoNomeProfessor;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorBorda;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorCima;
+    private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorCimaNomeDisciplina;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorCimaSigla;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorFundo;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorNomeCurso;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorNomeDisciplina;
+    private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorNomeDisciplina1;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorNomeProfessor;
     private br.com.davidbuzatto.logosmoodle.PainelSelecaoCores painelCorSigla;
     private javax.swing.JPanel painelCores;
@@ -1052,6 +1173,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel painelCoresDisciplina;
     private javax.swing.JPanel painelCoresFundo;
     private javax.swing.JPanel painelCoresProfessor;
+    private javax.swing.JPanel painelCoresSigla;
+    private javax.swing.JPanel painelEsquemas;
     private javax.swing.JScrollPane scrollNomeDisciplina;
     private javax.swing.JTextField txtNomeCurso;
     private javax.swing.JTextField txtNomeProfessor;
