@@ -47,9 +47,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         modeloEsquema = new DefaultComboBoxModel<>();
         modeloEsquema.addElement( new EsquemaCorDisciplina( "Padrão", Color.BLACK ) );
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVAPRC", new Color( 23, 147, 195 ) ) );
-        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVESDD", new Color( 46, 130, 163 ) ) );
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVCONC", new Color( 66, 135, 38 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVESDD", new Color( 46, 130, 163 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVIDSW", new Color( 187, 111, 31 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVLIFA", new Color( 69, 119, 146 ) ) );
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVORIN", new Color( 39, 111, 139 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVPROO", new Color( 99, 138, 102 ) ) );
         comboEsquemas.setModel( modeloEsquema );
         comboEsquemas.setRenderer( new EsquemaCorDisciplinaListCellRenderer() );
         
@@ -846,20 +849,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
              ) == JOptionPane.YES_OPTION ) {
             
             drawWindow.reset();
-            gerarEsquema( Color.BLACK );
-            
-            // SBVAPRC
-            //gerarEsquema( new Color( 23, 147, 195 ) );
-            
-            // SBVESDD
-            //gerarEsquema( new Color( 46, 130, 163 ) );
-            
-            // SBVCONC
-            //gerarEsquema( new Color( 66, 135, 38 ) );
-            
-            // SBVORIN
-            //gerarEsquema( new Color( 39, 111, 139 ) );
-            
+            gerarEsquema( ( (EsquemaCorDisciplina) comboEsquemas.getSelectedItem() ).corBase() );
             
         }
         
