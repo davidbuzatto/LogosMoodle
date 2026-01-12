@@ -51,7 +51,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVESDD", new Color( 46, 130, 163 ) ) );
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVIDSW", new Color( 187, 111, 31 ) ) );
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVLIFA", new Color( 69, 119, 146 ) ) );
-        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVORIN", new Color( 39, 111, 139 ) ) );
+        modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVORIN", new Color( 101, 72, 128 ) ) );
         modeloEsquema.addElement( new EsquemaCorDisciplina( "SBVPROO", new Color( 99, 138, 102 ) ) );
         comboEsquemas.setModel( modeloEsquema );
         comboEsquemas.setRenderer( new EsquemaCorDisciplinaListCellRenderer() );
